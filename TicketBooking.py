@@ -6,11 +6,14 @@ Version 1: Created the class and GUI
 
 from tkinter import *
 
+# Constants
 ADULT = 15
 CHILD = 5
 STUDENT = 10
-max_ticket = 100
 
+# Maximumn ammount of tickets
+max_ticket = 100
+# Object Oriented Programming
 class Ticket():
     def __init__(self, price, quantity):
         self.price = price
@@ -19,7 +22,7 @@ class Ticket():
     def calc_sub(self):
         '''Calculate and return the sub total'''
         return self.price * self.quantity
-
+# Functions
 def collect_ticket():
     '''Create an object for each ticket type and store them in a list'''
     order_list = []
@@ -30,86 +33,88 @@ def collect_ticket():
     return order_list
 
 def check_ticket():
-    '''Check if the tickets is sold out'''
+    '''
+        Check if the tickets is sold out ( if it is sold out it will overwrite 
+        the label and says 'Sold out' if not sold out it will call function proceed )
+    '''
     global max_ticket
-
     if max_ticket <= 0:
         ticket_label.configure(text="Sold Out")
         total_label.configure(text="Sold Out")
     elif max_ticket > 0:
         proceed()
         
-
 def proceed():
-    '''Make user continue and check how many tickets are left'''
+    '''
+    calculate how many tickets are left and will overwrite the label for 'Tickets Left:'
+    will also remove itself after the user click it to ensure that they do not click it first before calculating
+    '''
     global max_ticket
     global button_proc
-
+    # Get the total tickets of all entries and substract it to 'max_tickets'
     adult = int(adult_entry.get())
     child = int(child_entry.get())
     student = int(student_entry.get())
     zein = adult + child + student
     max_ticket -= zein
-
+    # Overwrite the ticket_label and destroy itself
     ticket_label.configure(text=f"Ticket Left: {max_ticket}")
     adult_num.set("")
     child_num.set("")
     student_num.set("")
     total_label.configure(text=f"")
-
     button_proc.destroy()
-
 
 def calculate():
     ''' Calculate the total for all object in the list '''
     global button_proc
-
+    # Calculate the total price for all entries
     total_price = int()
     for order in collect_ticket():
         total_price += order.calc_sub()
     total_label.configure(text=f"${total_price:.2f}")
-
+    # This will add the 'Proceed' Button back to the window after the user click calculate
     button_proc = Button(root, text="Proceed", font=("Courier",15,"bold"), fg="black", bg="#F75D59",command=check_ticket, width=19)
     button_proc.grid(row=5, column=1, sticky="WE", padx=1, pady=3)
 
 def quit():
     '''destroy the window'''
+    # Destroy the window
     root.destroy()
 
-# GUI
+# Graphical User Interface
+
+# Configuring the window and making sure that it is not resisable so that I can work confidently on the window's width and height.
 root = Tk()
 root.title("Ticket Booking System")
 root.geometry("500x215")
 root.configure(bg="#1E1E1E")
-photo = PhotoImage(file="ticket2.gif")
-
+# Makes it nor resisable and added a icon
 root.resizable(0,0)
+photo = PhotoImage(file="ticket2.gif")
 root.iconphoto(False,photo)
-
+# IntVar for all entries
 adult_num = IntVar()
 child_num = IntVar()
 student_num = IntVar()
-
-
+# Set the it to "" to make the entry clean
 adult_num.set("")
 child_num.set("")
 student_num.set("")
-
+# Labels
 ticket_label = Label(root, text=f"Ticket Left: {max_ticket}", font=("Courier",15,"bold"), fg="white", bg="#1E1E1E")
-
 label_adult = Label(root, text="Adult $15:", font=("Courier",15,"bold"), fg="black", bg="#FFCCCB")
 label_child = Label(root, text="Child $5:", font=("Courier",15,"bold"), fg="black", bg="#FFCCCB")
 label_student = Label(root, text="Student/Senior $10:", font=("Courier",15,"bold"), fg="black", bg="#FFCCCB")
 label1 = Label(root, text="Total Price:", font=("Courier",15,"bold"), fg="black", bg="#FFCCCB")
-
 total_label = Label(root, text="",font=("Courier",17,"bold"), fg="black", bg="#CCFEFF")
-
+# Buttons
 button_calc = Button(root, text="Calculate", font=("Courier",15,"bold"), fg="black", bg="#F75D59",command=calculate)
-
+# Entries
 adult_entry = Entry(root, textvariable = adult_num, justify = "left", font = ("Courier", 17, "bold"), fg="black", bg="#CCFEFF", width=18)
 child_entry = Entry(root, textvariable = child_num, justify = "left", font = ("Courier", 17, "bold"), fg="black", bg="#CCFEFF", width=18)
 student_entry = Entry(root, textvariable = student_num, justify = "left", font = ("Courier", 17, "bold"), fg="black", bg="#CCFEFF", width=18)
-
+# Grids
 ticket_label.grid(row=0, columnspan=2, sticky="WE")
 label_adult.grid(row=1, column=0, sticky="WE", padx=3, pady=3)
 label_child.grid(row=2, column=0, sticky="WE", padx=3, pady=3)
@@ -120,6 +125,5 @@ adult_entry.grid(row=1, column=1, sticky="W", padx=1, pady=3)
 child_entry.grid(row=2, column=1, sticky="W", padx=1, pady=3)
 student_entry.grid(row=3, column=1, sticky="W", padx=1, pady=3)
 total_label.grid(row=4, column=1, sticky="WE", padx=1, pady=3)
-
-
+# Mainloop
 root.mainloop()
