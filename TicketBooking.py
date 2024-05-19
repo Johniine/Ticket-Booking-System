@@ -4,6 +4,7 @@ Purpose: To develop a working ticket booking system with a graphical user interf
 Version 1: Created the class and GUI
 '''
 
+# Import
 from tkinter import *
 
 # Constants
@@ -12,7 +13,13 @@ CHILD = 5
 STUDENT = 10
 
 # Maximumn ammount of tickets
-max_ticket = 100
+max_ticket = 0
+
+# Files
+with open('tickets.txt','r') as file_tickets:
+    ticket_left = file_tickets.read()
+    max_ticket += int(ticket_left)
+
 # Object Oriented Programming
 class Ticket():
     def __init__(self, price, quantity):
@@ -76,6 +83,9 @@ def proceed():
     student = int(student_entry.get())
     zein = adult + child + student
     max_ticket -= zein
+    # Files
+    with open('tickets.txt','w') as dump_tickets:
+        dump_tickets.write(str(max_ticket))
     # Overwrite the ticket_label and destroy itself
     ticket_label.configure(text=f"Ticket Left: {max_ticket}")
     adult_num.set("")
