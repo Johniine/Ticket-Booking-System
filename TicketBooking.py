@@ -43,7 +43,26 @@ def check_ticket():
         total_label.configure(text="Sold Out")
     elif max_ticket > 0:
         proceed()
-        
+
+def check_entry():
+    '''Check if the user entered a valid number or not'''
+    global max_ticket
+    check_adult = int(adult_entry.get())
+    check_child = int(child_entry.get())
+    check_student = int(student_entry.get())
+    # Add all entries
+    legend = check_adult + check_child + check_student
+    # Check if entry entered exceed maximumn tickets
+    if max_ticket - legend == 0:
+        calculate()
+        error_label.configure(text="Error Message")
+        ticket_label.configure(text="Sold Out")
+    elif max_ticket - legend > 0:
+        error_label.configure(text="Error Message")
+        calculate()
+    elif max_ticket - legend < 0:
+        error_label.configure(text="You Exceeded Maximumn Ticket")
+
 def proceed():
     '''
     calculate how many tickets are left and will overwrite the label for 'Tickets Left:'
@@ -87,7 +106,7 @@ def quit():
 # Configuring the window and making sure that it is not resisable so that I can work confidently on the window's width and height.
 root = Tk()
 root.title("Ticket Booking System")
-root.geometry("500x215")
+root.geometry("500x225")
 root.configure(bg="#1E1E1E")
 # Makes it nor resisable and added a icon
 root.resizable(0,0)
@@ -100,8 +119,9 @@ student_num = IntVar()
 # Set the it to "" to make the entry clean
 adult_num.set("")
 child_num.set("")
-student_num.set("")
+student_num.set("") 
 # Labels
+error_label = Label(root,text="Error Message", font=("Courier",10,"bold"), fg="white", bg="#1E1E1E")
 ticket_label = Label(root, text=f"Ticket Left: {max_ticket}", font=("Courier",15,"bold"), fg="white", bg="#1E1E1E")
 label_adult = Label(root, text="Adult $15:", font=("Courier",15,"bold"), fg="black", bg="#FFCCCB")
 label_child = Label(root, text="Child $5:", font=("Courier",15,"bold"), fg="black", bg="#FFCCCB")
@@ -109,13 +129,14 @@ label_student = Label(root, text="Student/Senior $10:", font=("Courier",15,"bold
 label1 = Label(root, text="Total Price:", font=("Courier",15,"bold"), fg="black", bg="#FFCCCB")
 total_label = Label(root, text="",font=("Courier",17,"bold"), fg="black", bg="#CCFEFF")
 # Buttons
-button_calc = Button(root, text="Calculate", font=("Courier",15,"bold"), fg="black", bg="#F75D59",command=calculate)
+button_calc = Button(root, text="Calculate", font=("Courier",15,"bold"), fg="black", bg="#F75D59",command=check_entry)
 # Entries
 adult_entry = Entry(root, textvariable = adult_num, justify = "left", font = ("Courier", 17, "bold"), fg="black", bg="#CCFEFF", width=18)
 child_entry = Entry(root, textvariable = child_num, justify = "left", font = ("Courier", 17, "bold"), fg="black", bg="#CCFEFF", width=18)
 student_entry = Entry(root, textvariable = student_num, justify = "left", font = ("Courier", 17, "bold"), fg="black", bg="#CCFEFF", width=18)
 # Grids
-ticket_label.grid(row=0, columnspan=2, sticky="WE")
+error_label.grid(row=0, column=1, sticky="WE", padx=3, pady=3)
+ticket_label.grid(row=0, column=0, sticky="WE", padx=3, pady=3)
 label_adult.grid(row=1, column=0, sticky="WE", padx=3, pady=3)
 label_child.grid(row=2, column=0, sticky="WE", padx=3, pady=3)
 label_student.grid(row=3, column=0, sticky="WE", padx=3, pady=3)
