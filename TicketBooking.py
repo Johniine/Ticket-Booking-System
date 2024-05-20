@@ -2,6 +2,7 @@
 Author: John Eric Ragos
 Purpose: To develop a working ticket booking system with a graphical user interface.
 Version 1: Created the class and GUI
+Version 2: Program wa able to be save
 '''
 
 # Import
