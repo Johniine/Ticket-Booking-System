@@ -78,6 +78,7 @@ def proceed():
     '''
     global max_ticket
     global button_proc
+    global button_quit
     # Get the total tickets of all entries and substract it to 'max_tickets'
     adult = int(adult_entry.get())
     child = int(child_entry.get())
@@ -94,10 +95,13 @@ def proceed():
     student_num.set("")
     total_label.configure(text=f"")
     button_proc.destroy()
+    button_quit = Button(root, text="Quit", font=("Courier",15,"bold"), fg="black", bg="#F75D59",command=quit, width=19)
+    button_quit.grid(row=5, column=1, sticky="WE", padx=1, pady=3)
 
 def calculate():
     ''' Calculate the total for all object in the list '''
     global button_proc
+    global button_quit
     # Calculate the total price for all entries
     total_price = int()
     for order in collect_ticket():
@@ -106,6 +110,7 @@ def calculate():
     # This will add the 'Proceed' Button back to the window after the user click calculate
     button_proc = Button(root, text="Proceed", font=("Courier",15,"bold"), fg="black", bg="#F75D59",command=check_ticket, width=19)
     button_proc.grid(row=5, column=1, sticky="WE", padx=1, pady=3)
+    button_quit.destroy()
 
 def quit():
     '''destroy the window'''
@@ -141,6 +146,7 @@ label1 = Label(root, text="Total Price:", font=("Courier",15,"bold"), fg="black"
 total_label = Label(root, text="",font=("Courier",17,"bold"), fg="black", bg="#CCFEFF")
 # Buttons
 button_calc = Button(root, text="Calculate", font=("Courier",15,"bold"), fg="black", bg="#F75D59",command=check_entry)
+button_quit = Button(root, text="Quit", font=("Courier",15,"bold"), fg="black", bg="#F75D59",command=quit, width=19)
 # Entries
 adult_entry = Entry(root, textvariable = adult_num, justify = "left", font = ("Courier", 17, "bold"), fg="black", bg="#CCFEFF", width=18)
 child_entry = Entry(root, textvariable = child_num, justify = "left", font = ("Courier", 17, "bold"), fg="black", bg="#CCFEFF", width=18)
@@ -157,5 +163,6 @@ adult_entry.grid(row=1, column=1, sticky="W", padx=1, pady=3)
 child_entry.grid(row=2, column=1, sticky="W", padx=1, pady=3)
 student_entry.grid(row=3, column=1, sticky="W", padx=1, pady=3)
 total_label.grid(row=4, column=1, sticky="WE", padx=1, pady=3)
+button_quit.grid(row=5, column=1, sticky="WE", padx=1, pady=3)
 # Mainloop
 root.mainloop()
