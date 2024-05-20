@@ -54,6 +54,7 @@ def check_ticket():
 
 def check_entry():
     '''Check if the user entered a valid number or not'''
+    # Used for calculations
     global max_ticket
     check_adult = int(adult_entry.get())
     check_child = int(child_entry.get())
@@ -63,8 +64,9 @@ def check_entry():
     # Check if entry entered exceed maximumn tickets
     if max_ticket - legend == 0:
         calculate()
-        error_label.configure(text="Error Message")
+        error_label.configure(text="Ticket Sold Out")
         ticket_label.configure(text="Sold Out")
+        button_calc.destroy()
     elif max_ticket - legend > 0:
         error_label.configure(text="Error Message")
         calculate()
@@ -76,6 +78,7 @@ def proceed():
     calculate how many tickets are left and will overwrite the label for 'Tickets Left:'
     will also remove itself after the user click it to ensure that they do not click it first before calculating
     '''
+    # Global 3 variables to be able to use on calculation and GUI
     global max_ticket
     global button_proc
     global button_quit
@@ -85,7 +88,7 @@ def proceed():
     student = int(student_entry.get())
     zein = adult + child + student
     max_ticket -= zein
-    # Files
+    # Files ' Overwrite the total of the other max ticket ( This add the new ticket left ) '
     with open('tickets.txt','w') as dump_tickets:
         dump_tickets.write(str(max_ticket))
     # Overwrite the ticket_label and destroy itself
@@ -100,6 +103,7 @@ def proceed():
 
 def calculate():
     ''' Calculate the total for all object in the list '''
+    # Global two variables to be able to remove and add them back to the GUI
     global button_proc
     global button_quit
     # Calculate the total price for all entries
@@ -117,6 +121,7 @@ def quit():
     # Destroy the window
     root.destroy()
 
+# Main Program
 # Graphical User Interface
 
 # Configuring the window and making sure that it is not resisable so that I can work confidently on the window's width and height.
@@ -136,7 +141,7 @@ student_num = IntVar()
 adult_num.set("")
 child_num.set("")
 student_num.set("") 
-# Labels
+# Labels and editable Labels
 error_label = Label(root,text="Error Message", font=("Courier",10,"bold"), fg="white", bg="#1E1E1E")
 ticket_label = Label(root, text=f"Ticket Left: {max_ticket}", font=("Courier",15,"bold"), fg="white", bg="#1E1E1E")
 label_adult = Label(root, text="Adult $15:", font=("Courier",15,"bold"), fg="black", bg="#FFCCCB")
@@ -151,7 +156,7 @@ button_quit = Button(root, text="Quit", font=("Courier",15,"bold"), fg="black", 
 adult_entry = Entry(root, textvariable = adult_num, justify = "left", font = ("Courier", 17, "bold"), fg="black", bg="#CCFEFF", width=18)
 child_entry = Entry(root, textvariable = child_num, justify = "left", font = ("Courier", 17, "bold"), fg="black", bg="#CCFEFF", width=18)
 student_entry = Entry(root, textvariable = student_num, justify = "left", font = ("Courier", 17, "bold"), fg="black", bg="#CCFEFF", width=18)
-# Grids
+# Grids ' To make the GUI look clean '
 error_label.grid(row=0, column=1, sticky="WE", padx=3, pady=3)
 ticket_label.grid(row=0, column=0, sticky="WE", padx=3, pady=3)
 label_adult.grid(row=1, column=0, sticky="WE", padx=3, pady=3)
