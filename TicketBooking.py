@@ -35,9 +35,9 @@ def collect_ticket():
     '''Create an object for each ticket type and store them in a list'''
     order_list = []
     order_list.clear()
-    order_list.append(Ticket(ADULT,int(adult_entry.get())))
-    order_list.append(Ticket(CHILD,int(child_entry.get())))
-    order_list.append(Ticket(STUDENT,int(student_entry.get())))
+    order_list.append(Ticket(ADULT,abs(int(adult_entry.get()))))
+    order_list.append(Ticket(CHILD,abs(int(child_entry.get()))))
+    order_list.append(Ticket(STUDENT,abs(int(student_entry.get()))))
     return order_list
 
 def check_ticket():
@@ -56,22 +56,32 @@ def check_entry():
     '''Check if the user entered a valid number or not'''
     # Used for calculations
     global max_ticket
-    check_adult = int(adult_entry.get())
-    check_child = int(child_entry.get())
-    check_student = int(student_entry.get())
-    # Add all entries
-    legend = check_adult + check_child + check_student
-    # Check if entry entered exceed maximumn tickets
-    if max_ticket - legend == 0:
-        calculate()
-        error_label.configure(text="Ticket Sold Out")
-        ticket_label.configure(text="Sold Out")
-        button_calc.destroy()
-    elif max_ticket - legend > 0:
-        error_label.configure(text="Error Message")
-        calculate()
-    elif max_ticket - legend < 0:
-        error_label.configure(text="You Exceeded Maximumn Ticket")
+    try:
+        check_adult = int(adult_entry.get())
+        check_child = int(child_entry.get())
+        check_student = int(student_entry.get())
+        legend = check_adult + check_child + check_student
+        # Add all entries
+        if check_adult <= -1:
+            error_label.configure(text="Order Cannot Be Negative")
+        elif check_child <= -1:
+            error_label.configure(text="Order Cannot Be Negative")
+        elif check_student <= -1:
+            error_label.configure(text="Order Cannot Be Negative")
+        else:
+            # Check if entry entered exceed maximumn tickets
+            if max_ticket - legend == 0:
+                calculate()
+                error_label.configure(text="Ticket Sold Out")
+                ticket_label.configure(text="Sold Out")
+                button_calc.destroy()
+            elif max_ticket - legend > 0:
+                error_label.configure(text="Error Message")
+                calculate()
+            elif max_ticket - legend < 0:
+                error_label.configure(text="You Exceeded Maximumn Ticket")
+    except:
+        error_label.configure(text="Must Be A Number")
 
 def proceed():
     '''
@@ -87,7 +97,7 @@ def proceed():
     child = int(child_entry.get())
     student = int(student_entry.get())
     zein = adult + child + student
-    max_ticket -= zein
+    max_ticket -= abs(zein)
     # Files ' Overwrite the total of the other max ticket ( This add the new ticket left ) '
     with open('tickets.txt','w') as dump_tickets:
         dump_tickets.write(str(max_ticket))
@@ -110,7 +120,7 @@ def calculate():
     total_price = int()
     for order in collect_ticket():
         total_price += order.calc_sub()
-    total_label.configure(text=f"${total_price:.2f}")
+    total_label.configure(text=f"${abs(total_price):.2f}")
     # This will add the 'Proceed' Button back to the window after the user click calculate
     button_proc = Button(root, text="Proceed", font=("Courier",15,"bold"), fg="black", bg="#F75D59",command=check_ticket, width=19)
     button_proc.grid(row=5, column=1, sticky="WE", padx=1, pady=3)
