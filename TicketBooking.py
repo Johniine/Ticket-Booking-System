@@ -2,7 +2,8 @@
 Author: John Eric Ragos
 Purpose: To develop a working ticket booking system with a graphical user interface.
 Version 1: Created the class and GUI
-Version 2: Program wa able to be save
+Version 2: Program is able to be save
+Version 3: Final Version of the program Bugs Fixed and working properly
 '''
 
 # Import
@@ -46,9 +47,13 @@ def check_ticket():
         the label and says 'Sold out' if not sold out it will call function proceed )
     '''
     global max_ticket
+    global button_proc
     if max_ticket <= 0:
         ticket_label.configure(text="Sold Out")
         total_label.configure(text="Sold Out")
+        adult_num.set("Sold Out")
+        child_num.set("Sold Out")
+        student_num.set("Sold Out")
     elif max_ticket > 0:
         proceed()
 
@@ -56,12 +61,14 @@ def check_entry():
     '''Check if the user entered a valid number or not'''
     # Used for calculations
     global max_ticket
+    # Makes the program more flexible
     try:
         check_adult = int(adult_entry.get())
         check_child = int(child_entry.get())
         check_student = int(student_entry.get())
         legend = check_adult + check_child + check_student
         # Add all entries
+        # Check if user entered negative number
         if check_adult <= -1:
             error_label.configure(text="Order Cannot Be Negative")
         elif check_child <= -1:
@@ -80,8 +87,9 @@ def check_entry():
                 calculate()
             elif max_ticket - legend < 0:
                 error_label.configure(text="You Exceeded Maximumn Ticket")
+    # Make an error message if user did not entered a number
     except:
-        error_label.configure(text="Must Be A Number")
+        error_label.configure(text="Enter Only Number")
 
 def proceed():
     '''
